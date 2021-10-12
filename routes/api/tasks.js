@@ -20,6 +20,7 @@ router.get("/show-task", auth, async (req, res) => {
     .populate("addedby", "name")
     .populate("addedBy")
     .populate("assignedTo")
+    .populate("phase", "phasename")
     .sort({
       createdAt: -1,
     })
@@ -46,7 +47,7 @@ router.post("/create-task", auth, async (req, res) => {
 // Update Tasks
 router.put("/:id", auth, async (req, res) => {
   try {
-    let task = await Tasks.findById(req.params.id);
+    let task = await (await Tasks.findById(req.params.id)).populate("phase");
     console.log(task);
     if (!task) return res.status(400).send("Task with given id is not present");
     task = extend(task, req.body);
@@ -79,6 +80,7 @@ router.get("/project-tasks/:id", auth, async (req, res) => {
     .populate("addedBy", "name")
     .populate("approvedBy")
     .populate("assignedTo")
+    .populate("phase")
     .sort({
       createdAt: -1,
     });
@@ -105,7 +107,16 @@ router.get("/parents", auth, async (req, res) => {
         as: "project",
       },
     },
+    {
+      $lookup: {
+        from: "projects",
+        localField: "phase",
+        foreignField: "_id",
+        as: "phase",
+      },
+    },
     { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
+    // { $unwind: { path: "$phase", preserveNullAndEmptyArrays: true } },
     {
       $lookup: {
         from: "users",
@@ -244,6 +255,7 @@ router.get("/:id", auth, async (req, res) => {
     .populate("addedBy", "name")
     .populate("approvedBy")
     .populate("assignedTo")
+    .populate("phase")
     .sort({
       createdAt: -1,
     });

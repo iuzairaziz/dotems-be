@@ -55,6 +55,7 @@ router.get("/show-projects", auth, async (req, res) => {
         ],
         as: "tasks",
       },
+      // $sort: { createdAt: -1 },
     },
     {
       $lookup: {
@@ -64,8 +65,17 @@ router.get("/show-projects", auth, async (req, res) => {
         as: "status",
       },
     },
+    {
+      $lookup: {
+        from: "paymentdetials",
+        localField: "_id",
+        foreignField: "project",
+        as: "paymentDetials",
+      },
+    },
     { $unwind: { path: "$status", preserveNullAndEmptyArrays: true } },
     { $unwind: { path: "$tasks", preserveNullAndEmptyArrays: true } },
+    // { $unwind: { path: "$paymentDetials", preserveNullAndEmptyArrays: true } },
     {
       $addFields: {
         projectTotalEstTime: {
@@ -719,11 +729,11 @@ router.get("/report", async (req, res) => {
       null;
     }
     if (startDate != "") {
-      console.log("else", startDate);
+      // console.log("else", startDate);
       let startdate = {};
       startdate.$gte = moment(startDate).startOf("day").toDate();
       requestObject.pmStartDate = startdate;
-      console.log(startdate);
+      // console.log(startdate);
     }
 
     if (clientStartDate != "") {
@@ -740,6 +750,7 @@ router.get("/report", async (req, res) => {
 
     let project = await Project.aggregate([
       { $match: requestObject },
+      { $sort: { createdAt: -1 } },
       {
         $lookup: {
           from: "expenses",
@@ -978,6 +989,14 @@ router.get("/report", async (req, res) => {
           localField: "platform",
           foreignField: "_id",
           as: "platform",
+        },
+      },
+      {
+        $lookup: {
+          from: "paymentDetials",
+          localField: "paymentDetials",
+          foreignField: "_id",
+          as: "paymentDetials",
         },
       },
       {
