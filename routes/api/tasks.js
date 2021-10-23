@@ -47,8 +47,10 @@ router.post("/create-task", auth, async (req, res) => {
 // Update Tasks
 router.put("/:id", auth, async (req, res) => {
   try {
-    let task = await (await Tasks.findById(req.params.id)).populate("phase");
-    console.log(task);
+    let task = await (
+      await Tasks.findById(req.params.id)
+    ).populate("phase", "phasename");
+    // console.log(task);
     if (!task) return res.status(400).send("Task with given id is not present");
     task = extend(task, req.body);
     await task.save();

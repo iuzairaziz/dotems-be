@@ -12,6 +12,7 @@ const paymentDetialsSchema = mongoose.Schema(
         exchangeRate: Number,
         PaymentRecievedDate: Date,
         PaymentDescription: String,
+        Tip: String,
       },
     ],
   },
