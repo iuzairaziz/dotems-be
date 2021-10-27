@@ -35,6 +35,8 @@ var apiRequestRouter = require("./routes/api/request");
 var apiLeaveRouter = require("./routes/api/leave");
 var apiPaymentRouter = require("./routes/api/paymentDetials");
 var apiLeaveSettingRouter = require("./routes/api/leaveSettings");
+var apiRequestComments = require("./routes/api/requestComments")
+
 
 var app = express();
 
@@ -76,6 +78,8 @@ app.use("/request", apiRequestRouter);
 app.use("/leave", apiLeaveRouter);
 app.use("/payment", apiPaymentRouter);
 app.use("/leave-setting", apiLeaveSettingRouter);
+app.use("/request-comment", apiRequestComments);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

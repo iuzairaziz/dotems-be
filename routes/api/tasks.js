@@ -109,14 +109,14 @@ router.get("/parents", auth, async (req, res) => {
         as: "project",
       },
     },
-    {
-      $lookup: {
-        from: "projects",
-        localField: "phase",
-        foreignField: "_id",
-        as: "phase",
-      },
-    },
+    // {
+    //   $lookup: {
+    //     from: "projects",
+    //     localField: "phase",
+    //     foreignField: "phase",
+    //     as: "phased",
+    //   },
+    // },
     { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
     // { $unwind: { path: "$phase", preserveNullAndEmptyArrays: true } },
     {
