@@ -8,9 +8,8 @@ const auth = require("../../middlewares/auth");
 
 // Add Leave Settings
 router.post("/settings", auth, async (req, res) => {
-  let leaveSetting = await LeaveSetting.findOne({
-    sandwhich: req.body.sandwhich,
-  });
+  let leaveSetting = await LeaveSetting.find();
+  console.log(leaveSetting)
   if (leaveSetting.length === 1) {
     leaveSetting = extend(leaveSetting[0], req.body);
     await leaveSetting
@@ -21,9 +20,11 @@ router.post("/settings", auth, async (req, res) => {
     .catch((err) => {
       return res.status(500).send({ error: err });
     });
+    
   }
   // if (leaveSetting) return res.status(400).send("Leave Setting not updated"); 
-  else {leaveSetting = new LeaveSetting(req.body);
+  else {
+    leaveSetting = new LeaveSetting(req.body);
     await leaveSetting
       .save()
       .then((resp) => {
