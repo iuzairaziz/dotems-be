@@ -11,9 +11,9 @@ router.post("/settings", auth, async (req, res) => {
   let leaveSetting = await LeaveSetting.findOne({
     sandwhich: req.body.sandwhich,
   });
-  if (leaveSetting) return res.status(400).send("Leave Setting not updated");
-  leaveSetting = new LeaveSetting(req.body);
-  leaveSetting
+  if (leaveSetting.length === 1) {
+    leaveSetting = extend(leaveSetting[0], req.body);
+    await leaveSetting
     .save()
     .then((resp) => {
       return res.send(resp);
@@ -21,6 +21,17 @@ router.post("/settings", auth, async (req, res) => {
     .catch((err) => {
       return res.status(500).send({ error: err });
     });
+  }
+  // if (leaveSetting) return res.status(400).send("Leave Setting not updated"); 
+  else {leaveSetting = new LeaveSetting(req.body);
+    await leaveSetting
+      .save()
+      .then((resp) => {
+        return res.send(resp);
+      })
+      .catch((err) => {
+        return res.status(500).send({ error: err });
+      })} 
 });
 
 // Get Leave Settings

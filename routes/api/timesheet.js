@@ -134,6 +134,68 @@ router.post("/weekly", auth, async (req, res) => {
   // console.log("recrds",records);
 });
 
+// Daily Timesheet
+router.post("/daily", auth, async (req, res) => {
+  try {
+    const data = req.body.employeeData;
+    const empId = req.body.empId;
+    const day = req.body.days;
+    const final = req.body.final;
+    console.log("body", req.body);
+    let records = [];
+    var i, j;
+    let taskRecords = [];
+    data.map((project) => {
+      project.tasks.map((task) => {
+        if (task.workDone) {
+          taskRecords.push({
+            workDone: task.workDone,
+            _id: task._id,
+          });
+        }
+        // [0, 1, 2, 3, 4, 5, 6].map((item) => {
+          records.push({
+            employee: empId,
+            task: task._id,
+            date: moment(day).format("YYYY-MM-DD"),
+            workedHrs: task.timesheet[0] && task.timesheet[0].workedHrs,
+            remarks: task.timesheet[0] && task.timesheet[0].remarks,
+            approvedBy: null,
+            status: "pending",
+            final: final,
+          });
+        // });
+      });
+    });
+    let result = await Timesheet.bulkWrite(
+      records.map((r) => {
+        return {
+          updateOne: {
+            filter: { date: r.date, employee: empId, task: r.task },
+            update: { $set: r },
+            upsert: true,
+          },
+        };
+      }),
+      { ordered: false }
+    );
+    let taskResult = await Tasks.bulkWrite(
+      taskRecords.map((r) => {
+        return {
+          updateOne: {
+            filter: { _id: r._id },
+            update: { $set: { workDone: r.workDone } },
+          },
+        };
+      })
+    );
+    res.send({ result, taskResult });
+  } catch (error) {
+    console.log("error is", error);
+    res.status(500).send({ error });
+  }
+});
+
 // Update Timesheet
 router.put("/:id", auth, async (req, res) => {
   try {
