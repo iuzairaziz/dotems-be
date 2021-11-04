@@ -35,8 +35,9 @@ var apiRequestRouter = require("./routes/api/request");
 var apiLeaveRouter = require("./routes/api/leave");
 var apiPaymentRouter = require("./routes/api/paymentDetials");
 var apiLeaveSettingRouter = require("./routes/api/leaveSettings");
-var apiRequestComments = require("./routes/api/requestComments")
-
+var apiRequestComments = require("./routes/api/requestComments");
+var apiEmployeeType = require("./routes/api/employeeType");
+var apiEmployeeDepartment = require("./routes/api/employeeDepartment");
 
 var app = express();
 
@@ -79,7 +80,8 @@ app.use("/leave", apiLeaveRouter);
 app.use("/payment", apiPaymentRouter);
 app.use("/leave-setting", apiLeaveSettingRouter);
 app.use("/request-comment", apiRequestComments);
-
+app.use("/employee-type", apiEmployeeType);
+app.use("/employee-department", apiEmployeeDepartment);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
