@@ -38,6 +38,7 @@ var apiLeaveSettingRouter = require("./routes/api/leaveSettings");
 var apiRequestComments = require("./routes/api/requestComments");
 var apiEmployeeType = require("./routes/api/employeeType");
 var apiEmployeeDepartment = require("./routes/api/employeeDepartment");
+var apiClientLabel = require("./routes/api/clientLabel");
 
 var app = express();
 
@@ -82,6 +83,7 @@ app.use("/leave-setting", apiLeaveSettingRouter);
 app.use("/request-comment", apiRequestComments);
 app.use("/employee-type", apiEmployeeType);
 app.use("/employee-department", apiEmployeeDepartment);
+app.use("/client-label", apiClientLabel);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -22,7 +22,9 @@ router.get("/:id", auth, async (req, res) => {
   let client;
   let projects;
   try {
-    client = await Client.findById(req.params.id);
+    client = await Client.findById(req.params.id)
+      .populate("platform")
+      .populate("clientLabel");
     if (!client)
       return res.status(400).send("Client with given id is not present");
   } catch {
