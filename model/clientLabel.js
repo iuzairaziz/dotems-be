@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const clientLabelScheme = mongoose.Schema(
   {
     name: String,
+    color: String,
     preset: {
       type: Boolean,
       default: 0,
