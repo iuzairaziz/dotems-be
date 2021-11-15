@@ -36,6 +36,10 @@ var apiLeaveRouter = require("./routes/api/leave");
 var apiPaymentRouter = require("./routes/api/paymentDetials");
 var apiLeaveSettingRouter = require("./routes/api/leaveSettings");
 var apiRequestComments = require("./routes/api/requestComments");
+var apiRoleRouter = require("./routes/api/role");
+var apiRolePermissionRouter = require("./routes/api/rolePermission");
+
+// var apiRequestComments = require("./routes/api/requestComments");
 var apiEmployeeType = require("./routes/api/employeeType");
 var apiEmployeeDepartment = require("./routes/api/employeeDepartment");
 var apiClientLabel = require("./routes/api/clientLabel");
@@ -81,6 +85,9 @@ app.use("/leave", apiLeaveRouter);
 app.use("/payment", apiPaymentRouter);
 app.use("/leave-setting", apiLeaveSettingRouter);
 app.use("/request-comment", apiRequestComments);
+app.use("/role", apiRoleRouter);
+app.use("/role-permission", apiRolePermissionRouter);
+
 app.use("/employee-type", apiEmployeeType);
 app.use("/employee-department", apiEmployeeDepartment);
 app.use("/client-label", apiClientLabel);
