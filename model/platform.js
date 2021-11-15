@@ -5,7 +5,7 @@ const paltformScheme = mongoose.Schema(
     name: String,
     preset: {
       type: Boolean,
-      default: 0,
+      default: false,
     },
   },
   { timestamps: true }

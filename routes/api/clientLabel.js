@@ -33,6 +33,26 @@ router.post("/create-clientlabel", auth, async (req, res) => {
     });
 });
 
+router.put("/preset/:id", auth, async (req, res) => {
+  try {
+    let labelPreset = await ClientLabel.findOne({ preset: true });
+    if (labelPreset) {
+      labelPreset.preset = false;
+      await labelPreset.save();
+    }
+    let label = await ClientLabel.findById(req.params.id);
+    if (!label)
+      return res.status(400).send("Label with given id is not present");
+    label.preset = true;
+    await label.save();
+    console.log(label);
+    return res.send(label);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Invalid Id"); // when id is inavlid
+  }
+});
+
 // Update clientlabel
 router.put("/:id", auth, async (req, res) => {
   try {

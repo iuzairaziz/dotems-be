@@ -32,6 +32,27 @@ router.post("/create-platform", auth, async (req, res) => {
     });
 });
 
+router.put("/preset/:id", auth, async (req, res) => {
+  try {
+    let platformPreset = await Platform.findOne({ preset: true });
+    if (platformPreset) {
+      platformPreset.preset = false;
+      await platformPreset.save();
+    }
+    let platform = await Platform.findById(req.params.id);
+
+    if (!platform)
+      return res.status(400).send("Platform with given id is not present");
+    platform.preset = true;
+    await platform.save();
+    console.log(platform);
+    return res.send(platform);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Invalid Id"); // when id is inavlid
+  }
+});
+
 // Update Designation
 router.put("/:id", auth, async (req, res) => {
   try {
