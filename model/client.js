@@ -6,10 +6,22 @@ const clientScheme = mongoose.Schema(
     companyName: String,
     address: String,
     mobileNo: Number,
+    otherContact: Number,
     email: String,
     url: String,
     dateOfJoin: Date,
     country: String,
+    clientType: String,
+    status: String,
+    socialContact: String,
+    platform: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Platform",
+    },
+    clientLabel: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ClientLabel",
+    },
   },
   { timestamps: true }
 );
