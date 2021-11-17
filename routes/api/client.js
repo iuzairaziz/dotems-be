@@ -12,9 +12,11 @@ router.get("/show-client", auth, async (req, res) => {
   let perPage = Number(req.query.perPage ? req.query.perPage : 1000);
   let skipRecords = perPage * (page - 1);
   let client = await Client.find()
-    // .populate("country")
+    .populate("platform")
+    .populate("clientLabel")
     .skip(skipRecords)
-    .limit(perPage);
+    .limit(perPage)
+    .sort({ createdAt: -1 });
   return res.send(client);
 });
 
