@@ -22,6 +22,10 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Machine",
     },
+    employeeType: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "EmployeeType",
+    },
     designation: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Designation",
