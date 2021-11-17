@@ -42,8 +42,17 @@ const projectScheme = mongoose.Schema(
         index: Number,
         phasename: String,
         estHrs: Number,
+        outSourceCost: { default: null, type: Number },
+        outSourceName: { type: String, default: null },
+        outSourceDeadline: { type: Date, default: null },
       },
     ],
+    // outSource: [
+    //   {
+    //     index: Number,
+    //     phasename: String,
+    //   },
+    // ],
     technology: [
       {
         type: mongoose.Schema.Types.ObjectId,
