@@ -44,6 +44,8 @@ var apiEmployeeType = require("./routes/api/employeeType");
 var apiEmployeeDepartment = require("./routes/api/employeeDepartment");
 var apiClientLabel = require("./routes/api/clientLabel");
 
+var apiWorkingDays = require("./routes/api/workingDays");
+
 var app = express();
 
 // view engine setup
@@ -91,6 +93,8 @@ app.use("/role-permission", apiRolePermissionRouter);
 app.use("/employee-type", apiEmployeeType);
 app.use("/employee-department", apiEmployeeDepartment);
 app.use("/client-label", apiClientLabel);
+
+app.use("/working-days", apiWorkingDays);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
