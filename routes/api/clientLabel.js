@@ -62,6 +62,7 @@ router.put("/:id", auth, async (req, res) => {
       return res.status(400).send("Client Label with given id is not present");
     // country = extend(country, req.body);
     clientlabel.name = req.body.name;
+    clientlabel.color = req.body.color;
     await clientlabel.save();
     return res.send(clientlabel);
   } catch {
