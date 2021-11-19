@@ -13,20 +13,20 @@ router.get("/show-working-shift", auth, async (req, res) => {
   return res.send(workingShift);
 });
 
-// //Get Single
-// router.get("/:id", auth, async (req, res) => {
-//   let workingHour;
-//   try {
-//     workingHour = await WorkingHours.findById(req.params.id);
-//     if (!workingHour)
-//       return res.status(400).send("Working Hours with given id is not present");
-//     else {
-//       return res.send(workingHour);
-//     }
-//   } catch {
-//     return res.status(400).send("Invalid Id"); // when id is inavlid
-//   }
-// });
+//Get Single
+router.get("/:id", auth, async (req, res) => {
+  let workingShift;
+  try {
+    workingShift = await WorkingShift.findById(req.params.id);
+    if (!workingShift)
+      return res.status(400).send("Working Hours with given id is not present");
+    else {
+      return res.send(workingShift);
+    }
+  } catch {
+    return res.status(400).send("Invalid Id"); // when id is inavlid
+  }
+});
 
 /*Add new Designation*/
 router.post("/create-working-shift", auth, async (req, res) => {
@@ -49,13 +49,13 @@ router.post("/create-working-shift", auth, async (req, res) => {
 //Update
 router.put("/:id", auth, async (req, res) => {
   try {
-    let workingHours = await WorkingHours.findById(req.params.id);
-    console.log(workingHours);
-    if (!workingHours)
-      return res.status(400).send("Working Hours with given id is not present");
-    workingHours = extend(workingHours, req.body);
-    await workingHours.save();
-    return res.send(workingHours);
+    let workingShift = await WorkingShift.findById(req.params.id);
+    console.log(workingShift);
+    if (!workingShift)
+      return res.status(400).send("Working Shift with given id is not present");
+    workingShift = extend(workingShift, req.body);
+    await workingShift.save();
+    return res.send(workingShift);
   } catch {
     return res.status(400).send("Invalid Id"); // when id is inavlid
   }
