@@ -47,6 +47,10 @@ var apiClientLabel = require("./routes/api/clientLabel");
 var apiWorkingDays = require("./routes/api/workingDays");
 var apiWorkingHours = require("./routes/api/workingHours");
 var apiWorkingShift = require("./routes/api/workingShift");
+var apiLeavePolicy = require("./routes/api/leavePolicy");
+var apiLeavePolicyTimeOff = require("./routes/api/leavePolicyTimeOffs");
+var apiTimeIn = require("./routes/api/timeInAttendance");
+var apiTimeOut = require("./routes/api/timeOutAttendance");
 
 var app = express();
 
@@ -99,6 +103,10 @@ app.use("/client-label", apiClientLabel);
 app.use("/working-days", apiWorkingDays);
 app.use("/working-hours", apiWorkingHours);
 app.use("/working-shift", apiWorkingShift);
+app.use("/leave-policy", apiLeavePolicy);
+app.use("/leave-policy-time-off", apiLeavePolicyTimeOff);
+app.use("/time-in", apiTimeIn);
+app.use("/time-out", apiTimeOut);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,27 +1,29 @@
 var express = require("express");
 const { extend } = require("lodash");
 var router = express.Router();
-const { WorkingShift } = require("../../model/workingShift");
+const { LeavePolicyTimeOff } = require("../../model/leavePolicyTimeOffs");
 const auth = require("../../middlewares/auth");
 
 /* Get All Designations And Users */
-router.get("/show-working-shift", auth, async (req, res) => {
+router.get("/show-leave-policy", auth, async (req, res) => {
   let page = Number(req.query.page ? req.query.page : 1);
   let perPage = Number(req.query.perPage ? req.query.perPage : 10);
   let skipRecords = perPage * (page - 1);
-  let workingShift = await WorkingShift.find().skip(skipRecords).limit(perPage);
-  return res.send(workingShift);
+  let leavePolicy = await LeavePolicyTimeOff.find()
+    .skip(skipRecords)
+    .limit(perPage);
+  return res.send(leavePolicy);
 });
 
 //Get Single
 router.get("/:id", auth, async (req, res) => {
-  let workingShift;
+  let leavePolicy;
   try {
-    workingShift = await WorkingShift.findById(req.params.id);
-    if (!workingShift)
+    leavePolicy = await LeavePolicyTimeOff.findById(req.params.id);
+    if (!leavePolicy)
       return res.status(400).send("Working Hours with given id is not present");
     else {
-      return res.send(workingShift);
+      return res.send(leavePolicy);
     }
   } catch {
     return res.status(400).send("Invalid Id"); // when id is inavlid
@@ -29,14 +31,17 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 /*Add new Designation*/
-router.post("/create-working-shift", auth, async (req, res) => {
-  let workingShift = await WorkingShift.findOne({
+router.post("/create-leave-policy", auth, async (req, res) => {
+  let leavePolicyTimeOffs = await LeavePolicyTimeOff.findOne({
     name: req.body.name,
   });
-  if (workingShift)
+  let leavePolicyType = await LeavePolicyTimeOff.findOne({
+    type: req.body.type,
+  });
+  if (leavePolicyTimeOffs && leavePolicyType)
     return res.status(400).send("Policy With Given Name Already Exsists");
-  workingShift = new WorkingShift(req.body);
-  workingShift
+  leavePolicyTimeOffs = new LeavePolicyTimeOff(req.body);
+  leavePolicyTimeOffs
     .save()
     .then((resp) => {
       return res.send(resp);
@@ -49,13 +54,13 @@ router.post("/create-working-shift", auth, async (req, res) => {
 //Update
 router.put("/:id", auth, async (req, res) => {
   try {
-    let workingShift = await WorkingShift.findById(req.params.id);
-    console.log(workingShift);
-    if (!workingShift)
-      return res.status(400).send("Working Shift with given id is not present");
-    workingShift = extend(workingShift, req.body);
-    await workingShift.save();
-    return res.send(workingShift);
+    let leavePolicy = await LeavePolicyTimeOff.findById(req.params.id);
+    console.log(leavePolicy);
+    if (!leavePolicy)
+      return res.status(400).send("Working Hours with given id is not present");
+    leavePolicy = extend(leavePolicy, req.body);
+    await leavePolicy.save();
+    return res.send(leavePolicy);
   } catch {
     return res.status(400).send("Invalid Id"); // when id is inavlid
   }
@@ -64,13 +69,15 @@ router.put("/:id", auth, async (req, res) => {
 // Delete Designation
 router.delete("/:id", auth, async (req, res) => {
   try {
-    let workingShift = await WorkingShift.findByIdAndDelete(req.params.id);
-    if (!workingShift) {
+    let leavePolicyTimeOff = await LeavePolicyTimeOff.findByIdAndDelete(
+      req.params.id
+    );
+    if (!leavePolicyTimeOff) {
       return res
         .status(400)
         .send("Working days policy with given id is not present"); // when there is no id in db
     }
-    return res.send(workingShift); // when everything is okay
+    return res.send(leavePolicyTimeOff); // when everything is okay
   } catch {
     return res.status(400).send("Invalid Id"); // when id is inavlid
   }
