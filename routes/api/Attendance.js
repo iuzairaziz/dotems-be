@@ -1,7 +1,7 @@
 var express = require("express");
 const { extend } = require("lodash");
 var router = express.Router();
-const { TimeOutAttendance } = require("../../model/timeOutAttendance");
+const { Attendance } = require("../../model/Attendance");
 const auth = require("../../middlewares/auth");
 
 // /* Get All Designations And Users */
@@ -29,15 +29,16 @@ const auth = require("../../middlewares/auth");
 // });
 
 /*Add new Designation*/
-router.post("/create-time-out", auth, async (req, res) => {
-  let timeOut = await TimeOutAttendance.findOne({
+router.post("/create-time-in", auth, async (req, res) => {
+  let timeIn = await Attendance.findOne({
     name: req.body.name,
     date: req.body.date,
   });
-  if (timeOut)
-    return res.status(400).send("Your Already Marked your Attendance");
-  timeOut = new TimeOutAttendance(req.body);
-  timeOut
+
+  // if (timeIn)
+  //   return res.status(400).send("Your Already Marked your Attendance");
+  timeIn = new Attendance(req.body);
+  timeIn
     .save()
     .then((resp) => {
       return res.send(resp);
@@ -45,6 +46,26 @@ router.post("/create-time-out", auth, async (req, res) => {
     .catch((err) => {
       return res.status(500).send({ error: err });
     });
+
+  // let timeOutAgain = await TimeOutAttendance.findOne({
+  //   name: req.body.name,
+  //   date: req.body.date,
+  // });
+
+  // if (timeOutAgain) {
+  //   let totalTime = new TotalTimeAttendance({
+  //     timeIn: timeIn._id,
+  //     timeOut: timeOutAgain._id,
+  //   });
+  //   totalTime
+  //     .save()
+  //     .then((resp) => {
+  //       return res.send(resp);
+  //     })
+  //     .catch((err) => {
+  //       return res.status(500).send({ error: err });
+  //     });
+  // }
 });
 
 // //Update
@@ -61,6 +82,27 @@ router.post("/create-time-out", auth, async (req, res) => {
 //     return res.status(400).send("Invalid Id"); // when id is inavlid
 //   }
 // });
+
+router.put("/update", auth, async (req, res) => {
+  try {
+    let timeIn = await Attendance.find({
+      name: req.body.name,
+    });
+
+    let oldTime = timeIn[timeIn.length - 1];
+    if (oldTime.timeOut)
+      return res
+        .status(400)
+        .send("You have Not marked your time out Attendance");
+    if (!oldTime.timeOut) {
+      oldTime = extend(oldTime, req.body);
+      await oldTime.save();
+      return res.send(oldTime);
+    }
+  } catch {
+    return res.status(400).send("Invalid Id"); // when id is inavlid
+  }
+});
 
 // // Delete Designation
 // router.delete("/:id", auth, async (req, res) => {
