@@ -38,6 +38,7 @@ var apiLeaveSettingRouter = require("./routes/api/leaveSettings");
 var apiRequestComments = require("./routes/api/requestComments");
 var apiRoleRouter = require("./routes/api/role");
 var apiRolePermissionRouter = require("./routes/api/rolePermission");
+var apitaskPriorityRouter = require("./routes/api/taskPriority");
 
 // var apiRequestComments = require("./routes/api/requestComments");
 var apiEmployeeType = require("./routes/api/employeeType");
@@ -69,6 +70,7 @@ app.use("/", indexRouter);
 app.use("/users", apiUserRouter);
 app.use("/projects", apiProjectRouter);
 app.use("/tasks", apiTasksRouter);
+app.use("/task-priority", apitaskPriorityRouter);
 app.use("/designation", apiDesignationRouter);
 app.use("/technologies", apiTechnologiesRouter);
 app.use("/client", apiClientRouter);

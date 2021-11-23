@@ -23,6 +23,10 @@ const taskSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
     },
+    taskPriority: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "TaskPrioirty",
+    },
     addedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
