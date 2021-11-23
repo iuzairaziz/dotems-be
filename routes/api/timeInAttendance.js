@@ -3,7 +3,6 @@ const { extend } = require("lodash");
 var router = express.Router();
 const { LeavePolicy } = require("../../model/leavePolicy");
 const auth = require("../../middlewares/auth");
-const { TimeInAttendance } = require("../../model/timeInAttendance");
 
 // /* Get All Designations And Users */
 // router.get("/show-working-hours", auth, async (req, res) => {
@@ -49,19 +48,6 @@ router.post("/create-time-in", auth, async (req, res) => {
 });
 
 // //Update
-// router.put("/:id", auth, async (req, res) => {
-//   try {
-//     let workingHours = await WorkingHours.findById(req.params.id);
-//     console.log(workingHours);
-//     if (!workingHours)
-//       return res.status(400).send("Working Hours with given id is not present");
-//     workingHours = extend(workingHours, req.body);
-//     await workingHours.save();
-//     return res.send(workingHours);
-//   } catch {
-//     return res.status(400).send("Invalid Id"); // when id is inavlid
-//   }
-// });
 
 // Delete Designation
 router.delete("/:id", auth, async (req, res) => {
