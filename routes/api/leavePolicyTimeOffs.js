@@ -31,18 +31,17 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 /*Add new Designation*/
-router.post("/create-leave-policy", auth, async (req, res) => {
+router.post("/", auth, async (req, res) => {
   let leavePolicyTimeOffs = await LeavePolicyTimeOff.findOne({
     name: req.body.name,
-  });
-  let leavePolicyType = await LeavePolicyTimeOff.findOne({
     type: req.body.type,
   });
-  if (leavePolicyTimeOffs && leavePolicyType)
+  console.log(req.body);
+
+  if (leavePolicyTimeOffs)
     return res.status(400).send("Policy With Given Name Already Exsists");
-  leavePolicyTimeOffs = new LeavePolicyTimeOff(req.body);
-  leavePolicyTimeOffs
-    .save()
+  // leavePolicyTimeOffs = new LeavePolicyTimeOff(req.body);
+  LeavePolicyTimeOff.insertMany(req.body)
     .then((resp) => {
       return res.send(resp);
     })

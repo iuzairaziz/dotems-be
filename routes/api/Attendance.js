@@ -93,7 +93,7 @@ router.put("/update", auth, async (req, res) => {
     if (oldTime.timeOut)
       return res
         .status(400)
-        .send("You have Not marked your time out Attendance");
+        .send("You have Not marked your time In Attendance");
     if (!oldTime.timeOut) {
       oldTime = extend(oldTime, req.body);
       await oldTime.save();

@@ -103,8 +103,8 @@ app.use("/client-label", apiClientLabel);
 app.use("/working-days", apiWorkingDays);
 app.use("/working-hours", apiWorkingHours);
 app.use("/working-shift", apiWorkingShift);
-app.use("/leave-policy", apiLeavePolicy);
-app.use("/leave-policy-time-off", apiLeavePolicyTimeOff);
+// app.use("/leave-policy", apiLeavePolicy);
+app.use("/leave-policy", apiLeavePolicyTimeOff);
 // app.use("/time-in", apiTimeIn);
 app.use("/time-in", apiTimeOut);
 
