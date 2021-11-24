@@ -4,47 +4,67 @@ const { Project } = require("./project");
 
 const userSchema = mongoose.Schema(
   {
-    name: String,
+    firstName: String,
+    lastName: String,
     email: String,
-    gender: String,
-    salary: Number,
-    workingHrs: Number,
     password: String,
-    status: String,
-    joiningDate: String,
-    contact: String,
-    otherContact: String,
-    emailPersonal: String,
-    address: String,
-    contactEmergency: String,
-    nameEmergency: String,
-    machineNo: {
+    userRole: [{ type: String }],
+    jobTitle: String,
+    designation: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Machine",
+      ref: "Designation",
     },
     employeeType: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "EmployeeType",
     },
-    designation: {
+    employeeManager: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Designation",
+      ref: "EmployeeManager",
     },
-    workingDays: Number,
-    userRole: [{ type: String }],
-    image: String,
+    department: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Department",
+    },
+    employeeStatus: String,
+    workingDays: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WorkingDays",
+    },
+    workingHours: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WorkingHours",
+    },
+    salary: Number,
+    machineNo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Machine",
+    },
+    resourceCost: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ResourceCost",
+    },
     technology: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Technology",
       },
     ],
-    role: [
-      {
-        type: String,
-        default: "User",
-      },
-    ],
+    contactNo: Number,
+    otherContactNo: Number,
+    personalEmail: String,
+    address: String,
+    guardianName: String,
+    guardianContact: String,
+    status: String,
+    gender: String,
+    city: String,
+    country: String,
+    bankName: String,
+    bankAccNo: String,
+    joiningDate: String,
+    terminationDate: String,
+    dateOfBirth: String,
   },
   { timestamps: true }
 );

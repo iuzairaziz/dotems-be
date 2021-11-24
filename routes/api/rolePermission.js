@@ -4,6 +4,7 @@ const { extend } = require("lodash");
 var router = express.Router();
 const { RolePermission } = require("../../model/rolePermission");
 const auth = require("../../middlewares/auth");
+const Mongoose = require("mongoose");
 
 /* Get All Roles And Users */
 router.get("/", auth, async (req, res) => {
@@ -14,22 +15,70 @@ router.get("/", auth, async (req, res) => {
   return res.send(role);
 });
 
+router.get("/role/:roleId", auth, async (req, res) => {
+  try {
+    let permissions = await RolePermission.find({ role: req.params.roleId });
+    if (permissions.length > 0) {
+      res.status(200).send(permissions);
+    } else {
+      res.status(404).send("no record found");
+    }
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
 /*Add new Role*/
 router.post("/", auth, async (req, res) => {
-  let rolePermission = await RolePermission.findOne({
-    name: req.body.name,
-  });
-  if (rolePermission)
-    return res.status(400).send("Role With Given Name Already Exsists");
-    rolePermission = new RolePermission(req.body);
-    rolePermission
-    .save()
-    .then((resp) => {
-      return res.send(resp);
-    })
-    .catch((err) => {
-      return res.status(500).send({ error: err });
+  try {
+    const { permissions, role } = req.body;
+    let records = [];
+    console.log("role", role);
+    permissions.map((p, pindex) => {
+      p.pages.map((page, pageIndex) => {
+        page.permissionOptions.map((po, poINdex) => {
+          records.push({
+            name: po.value,
+            page: page.name,
+            active: po.checked,
+            role: Mongoose.Types.ObjectId(role),
+          });
+          if (po.subPermissions) {
+            po.subPermissions.map((sp) => {
+              records.push({
+                name: sp.value,
+                page: page.name,
+                active: sp.checked,
+                role: Mongoose.Types.ObjectId(role),
+              });
+            });
+          }
+        });
+      });
     });
+
+    let result = await RolePermission.bulkWrite(
+      records.map((r) => {
+        return {
+          updateOne: {
+            filter: {
+              name: r.name,
+              page: r.page,
+              role: role,
+            },
+            update: { $set: r },
+            upsert: true,
+          },
+        };
+      })
+      // { ordered: false }
+    );
+
+    res.send({ result });
+  } catch (error) {
+    console.log("error is", error);
+    res.status(500).send({ error });
+  }
 });
 
 // Update Role
@@ -39,7 +88,7 @@ router.put("/:id", auth, async (req, res) => {
     console.log(rolePermission);
     if (!rolePermission)
       return res.status(400).send("Role with given id is not present");
-      rolePermission = extend(rolePermission, req.body);
+    rolePermission = extend(rolePermission, req.body);
     await rolePermission.save();
     return res.send(rolePermission);
   } catch {

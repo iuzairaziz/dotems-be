@@ -38,6 +38,7 @@ var apiLeaveSettingRouter = require("./routes/api/leaveSettings");
 var apiRequestComments = require("./routes/api/requestComments");
 var apiRoleRouter = require("./routes/api/role");
 var apiRolePermissionRouter = require("./routes/api/rolePermission");
+var apitaskPriorityRouter = require("./routes/api/taskPriority");
 
 // var apiRequestComments = require("./routes/api/requestComments");
 var apiEmployeeType = require("./routes/api/employeeType");
@@ -47,6 +48,7 @@ var apiClientLabel = require("./routes/api/clientLabel");
 var apiWorkingDays = require("./routes/api/workingDays");
 var apiWorkingHours = require("./routes/api/workingHours");
 var apiWorkingShift = require("./routes/api/workingShift");
+var apiResourceCost = require("./routes/api/resourceCost");
 var apiLeavePolicy = require("./routes/api/leavePolicy");
 var apiLeavePolicyTimeOff = require("./routes/api/leavePolicyTimeOffs");
 // var apiTimeIn = require("./routes/api/timeInAttendance");
@@ -69,6 +71,7 @@ app.use("/", indexRouter);
 app.use("/users", apiUserRouter);
 app.use("/projects", apiProjectRouter);
 app.use("/tasks", apiTasksRouter);
+app.use("/task-priority", apitaskPriorityRouter);
 app.use("/designation", apiDesignationRouter);
 app.use("/technologies", apiTechnologiesRouter);
 app.use("/client", apiClientRouter);
@@ -105,6 +108,9 @@ app.use("/working-hours", apiWorkingHours);
 app.use("/working-shift", apiWorkingShift);
 app.use("/leave-policy", apiLeavePolicy);
 app.use("/leave-policy-detail", apiLeavePolicyTimeOff);
+app.use("/resource-cost", apiResourceCost);
+// app.use("/leave-policy", apiLeavePolicy);
+
 // app.use("/time-in", apiTimeIn);
 app.use("/attendance", apiTimeOut);
 
