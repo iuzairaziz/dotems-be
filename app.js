@@ -103,10 +103,10 @@ app.use("/client-label", apiClientLabel);
 app.use("/working-days", apiWorkingDays);
 app.use("/working-hours", apiWorkingHours);
 app.use("/working-shift", apiWorkingShift);
-// app.use("/leave-policy", apiLeavePolicy);
-app.use("/leave-policy", apiLeavePolicyTimeOff);
+app.use("/leave-policy", apiLeavePolicy);
+app.use("/leave-policy-detail", apiLeavePolicyTimeOff);
 // app.use("/time-in", apiTimeIn);
-app.use("/time-in", apiTimeOut);
+app.use("/attendance", apiTimeOut);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -3,15 +3,16 @@ const { extend } = require("lodash");
 var router = express.Router();
 const { LeavePolicy } = require("../../model/leavePolicy");
 const auth = require("../../middlewares/auth");
+const { LeavePolicyTimeOff } = require("../../model/leavePolicyTimeOffs");
 
 // /* Get All Designations And Users */
-// router.get("/show-working-hours", auth, async (req, res) => {
-//   let page = Number(req.query.page ? req.query.page : 1);
-//   let perPage = Number(req.query.perPage ? req.query.perPage : 10);
-//   let skipRecords = perPage * (page - 1);
-//   let workingHours = await WorkingHours.find().skip(skipRecords).limit(perPage);
-//   return res.send(workingHours);
-// });
+router.get("/", auth, async (req, res) => {
+  let page = Number(req.query.page ? req.query.page : 1);
+  let perPage = Number(req.query.perPage ? req.query.perPage : 10);
+  let skipRecords = perPage * (page - 1);
+  let leavePolicies = await LeavePolicy.find().skip(skipRecords).limit(perPage);
+  return res.send(leavePolicies);
+});
 
 // //Get Single
 // router.get("/:id", auth, async (req, res) => {
@@ -29,7 +30,7 @@ const auth = require("../../middlewares/auth");
 // });
 
 /*Add new Designation*/
-router.post("/create-leave-policy", auth, async (req, res) => {
+router.post("/", auth, async (req, res) => {
   let leavePolicy = await LeavePolicy.findOne({
     name: req.body.name,
   });

@@ -4,14 +4,16 @@ var router = express.Router();
 const { Attendance } = require("../../model/Attendance");
 const auth = require("../../middlewares/auth");
 
-// /* Get All Designations And Users */
-// router.get("/show-working-hours", auth, async (req, res) => {
-//   let page = Number(req.query.page ? req.query.page : 1);
-//   let perPage = Number(req.query.perPage ? req.query.perPage : 10);
-//   let skipRecords = perPage * (page - 1);
-//   let workingHours = await WorkingHours.find().skip(skipRecords).limit(perPage);
-//   return res.send(workingHours);
-// });
+/* Get All Designations And Users */
+router.get("/:id", auth, async (req, res) => {
+  let page = Number(req.query.page ? req.query.page : 1);
+  let perPage = Number(req.query.perPage ? req.query.perPage : 10);
+  let skipRecords = perPage * (page - 1);
+  let allAttendanceTime = await Attendance.find({ name: req.params.id })
+    .skip(skipRecords)
+    .limit(perPage);
+  return res.send(allAttendanceTime);
+});
 
 // //Get Single
 // router.get("/:id", auth, async (req, res) => {
