@@ -20,6 +20,17 @@ router.get("/show-client", auth, async (req, res) => {
   return res.send(client);
 });
 
+router.get("/client-projects/:id", auth, async (req, res) => {
+  try {
+    let client = await Project.find({ client: req.params.id });
+    if (client.length > 0) {
+      return res.status(200).send("project exists");
+    } else res.status(400).send("No Projects");
+  } catch {
+    return res.status(400).send("Invalid Id");
+  }
+});
+
 router.get("/:id", auth, async (req, res) => {
   let client;
   let projects;

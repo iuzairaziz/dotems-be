@@ -38,6 +38,7 @@ var apiLeaveSettingRouter = require("./routes/api/leaveSettings");
 var apiRequestComments = require("./routes/api/requestComments");
 var apiRoleRouter = require("./routes/api/role");
 var apiRolePermissionRouter = require("./routes/api/rolePermission");
+var apitaskPriorityRouter = require("./routes/api/taskPriority");
 
 // var apiRequestComments = require("./routes/api/requestComments");
 var apiEmployeeType = require("./routes/api/employeeType");
@@ -48,6 +49,10 @@ var apiWorkingDays = require("./routes/api/workingDays");
 var apiWorkingHours = require("./routes/api/workingHours");
 var apiWorkingShift = require("./routes/api/workingShift");
 var apiResourceCost = require("./routes/api/resourceCost");
+var apiLeavePolicy = require("./routes/api/leavePolicy");
+var apiLeavePolicyTimeOff = require("./routes/api/leavePolicyTimeOffs");
+// var apiTimeIn = require("./routes/api/timeInAttendance");
+var apiTimeOut = require("./routes/api/Attendance");
 
 var app = express();
 
@@ -66,6 +71,7 @@ app.use("/", indexRouter);
 app.use("/users", apiUserRouter);
 app.use("/projects", apiProjectRouter);
 app.use("/tasks", apiTasksRouter);
+app.use("/task-priority", apitaskPriorityRouter);
 app.use("/designation", apiDesignationRouter);
 app.use("/technologies", apiTechnologiesRouter);
 app.use("/client", apiClientRouter);
@@ -101,6 +107,10 @@ app.use("/working-days", apiWorkingDays);
 app.use("/working-hours", apiWorkingHours);
 app.use("/working-shift", apiWorkingShift);
 app.use("/resource-cost", apiResourceCost);
+// app.use("/leave-policy", apiLeavePolicy);
+app.use("/leave-policy", apiLeavePolicyTimeOff);
+// app.use("/time-in", apiTimeIn);
+app.use("/time-in", apiTimeOut);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

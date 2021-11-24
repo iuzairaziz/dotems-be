@@ -119,16 +119,18 @@ router.get("/pmprojects/:id", auth, async (req, res) => {
 
 /* Add New Project . */
 router.post("/create-project", auth, async (req, res) => {
-  console.log("kkkkkkkk", req.body);
+  // console.log("kkkkkkkk", req.body);
   let projects = await Project.findOne({ name: req.body.name });
   if (projects)
     return res.status(400).send("Project With Given Name Already Exsists");
   project = new Project(req.body);
   project
     .save()
-    .then((resp) => {
-      console.log("kkkkkkkk 200", req.body);
-      return res.send(resp);
+    .then(async (resp) => {
+      let populated = await Project.findById(resp._id).populate("client");
+      console.log("kkkkkkkk", populated);
+      // console.log("kkkkkkkk 200", req.body);
+      return res.send(populated);
     })
     .catch((err) => {
       return res.status(500).send({ error: err });

@@ -3,27 +3,26 @@ const auth = require("../../middlewares/auth");
 const _ = require("lodash");
 const { extend } = require("lodash");
 var router = express.Router();
-const { ClientLabel } = require("../../model/clientLabel");
-const { Designation } = require("../../model/designation");
+const { TaskPrioirty } = require("../../model/taskPriority");
 
-/* Get All clientlabels */
-router.get("/show-clientlabel", auth, async (req, res) => {
+/* Get All taskPriority */
+router.get("/show-taskpriority", auth, async (req, res) => {
   let page = Number(req.query.page ? req.query.page : 1);
   let perPage = Number(req.query.perPage ? req.query.perPage : 10);
   let skipRecords = perPage * (page - 1);
-  let clientlabel = await ClientLabel.find().skip(skipRecords).limit(perPage);
-  return res.send(clientlabel);
+  let taskpriority = await TaskPrioirty.find().skip(skipRecords).limit(perPage);
+  return res.send(taskpriority);
 });
 
-/*Add new clientlabel*/
-router.post("/create-clientlabel", auth, async (req, res) => {
-  let clientlabel = await ClientLabel.findOne({
+/*Add new taskpriority*/
+router.post("/create-taskpriority", auth, async (req, res) => {
+  let taskpriority = await TaskPrioirty.findOne({
     name: req.body.name,
   });
-  if (clientlabel)
+  if (taskpriority)
     return res.status(400).send("Client Label With Given Name Already Exsists");
-  clientlabel = new ClientLabel(req.body);
-  clientlabel
+  taskpriority = new TaskPrioirty(req.body);
+  taskpriority
     .save()
     .then((resp) => {
       return res.send(resp);
@@ -35,14 +34,14 @@ router.post("/create-clientlabel", auth, async (req, res) => {
 
 router.put("/preset/:id", auth, async (req, res) => {
   try {
-    let labelPreset = await ClientLabel.findOne({ preset: true });
-    if (labelPreset) {
-      labelPreset.preset = false;
-      await labelPreset.save();
+    let priorityPreset = await TaskPrioirty.findOne({ preset: true });
+    if (priorityPreset) {
+      priorityPreset.preset = false;
+      await priorityPreset.save();
     }
-    let label = await ClientLabel.findById(req.params.id);
+    let label = await TaskPrioirty.findById(req.params.id);
     if (!label)
-      return res.status(400).send("Label with given id is not present");
+      return res.status(400).send("Task Priority with given id is not present");
     label.preset = true;
     await label.save();
     console.log(label);
@@ -53,31 +52,31 @@ router.put("/preset/:id", auth, async (req, res) => {
   }
 });
 
-// Update clientlabel
+// Update taskpriority
 router.put("/:id", auth, async (req, res) => {
   try {
-    let clientlabel = await ClientLabel.findById(req.params.id);
-    console.log(clientlabel);
-    if (!clientlabel)
+    let taskpriority = await TaskPrioirty.findById(req.params.id);
+    console.log(taskpriority);
+    if (!taskpriority)
       return res.status(400).send("Client Label with given id is not present");
     // country = extend(country, req.body);
-    clientlabel.name = req.body.name;
-    clientlabel.color = req.body.color;
-    await clientlabel.save();
-    return res.send(clientlabel);
+    taskpriority.name = req.body.name;
+    taskpriority.color = req.body.color;
+    await taskpriority.save();
+    return res.send(taskpriority);
   } catch {
     return res.status(400).send("Invalid Id"); // when id is inavlid
   }
 });
 
-// Delete clientlabel
+// Delete taskpriority
 router.delete("/:id", auth, async (req, res) => {
   try {
-    let clientlabel = await ClientLabel.findByIdAndDelete(req.params.id);
-    if (!clientlabel) {
+    let taskpriority = await TaskPrioirty.findByIdAndDelete(req.params.id);
+    if (!taskpriority) {
       return res.status(400).send("Client Label with given id is not present"); // when there is no id in db
     }
-    return res.send(clientlabel); // when everything is okay
+    return res.send(taskpriority); // when everything is okay
   } catch {
     return res.status(400).send("Invalid Task Id"); // when id is inavlid
   }
