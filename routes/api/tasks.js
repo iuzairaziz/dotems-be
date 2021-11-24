@@ -111,7 +111,6 @@ router.get("/parents", auth, async (req, res) => {
       },
     },
     { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
-    // { $unwind: { path: "$taskPriority", preserveNullAndEmptyArrays: true } },
     {
       $lookup: {
         from: "users",
@@ -145,12 +144,13 @@ router.get("/parents", auth, async (req, res) => {
     { $unwind: { path: "$timesheet", preserveNullAndEmptyArrays: true } },
     {
       $lookup: {
-        from: "TaskPrioirty",
+        from: "taskprioirties",
         localField: "taskPriority",
         foreignField: "_id",
         as: "taskPriority",
       },
     },
+    { $unwind: { path: "$taskPriority", preserveNullAndEmptyArrays: true } },
     { $sort: { createdAt: -1 } },
   ]);
 
