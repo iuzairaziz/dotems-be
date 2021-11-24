@@ -47,6 +47,7 @@ var apiClientLabel = require("./routes/api/clientLabel");
 var apiWorkingDays = require("./routes/api/workingDays");
 var apiWorkingHours = require("./routes/api/workingHours");
 var apiWorkingShift = require("./routes/api/workingShift");
+var apiResourceCost = require("./routes/api/resourceCost");
 
 var app = express();
 
@@ -99,6 +100,7 @@ app.use("/client-label", apiClientLabel);
 app.use("/working-days", apiWorkingDays);
 app.use("/working-hours", apiWorkingHours);
 app.use("/working-shift", apiWorkingShift);
+app.use("/resource-cost", apiResourceCost);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
