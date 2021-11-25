@@ -69,6 +69,13 @@ router.get("/", auth, async function (req, res, next) {
     .populate("technology")
     .populate("machineNo", "machineNo")
     .populate("designation")
+    .populate("role")
+    .populate("employeeType")
+    .populate("department")
+    .populate("workingDays")
+    .populate("workingHours")
+    .populate("resourceCost")
+    .populate("employeeManager")
     .sort({
       createdAt: -1,
     })
@@ -119,6 +126,7 @@ router.post("/register", upload, async (req, res) => {
   user.joiningDate = req.body.joiningDate;
   user.terminationDate = req.body.terminationDate;
   user.dateOfBirth = req.body.dateOfBirth;
+  user.role = req.body.role;
   await user.generateHashedPassword();
   await user.save();
   return res.send(
@@ -251,7 +259,15 @@ router.get("/:id", auth, async (req, res) => {
     user = await User.findById(req.params.id)
       .populate("technology")
       .populate("designation")
-      .populate("machineNo", "machineNo");
+      .populate("machineNo", "machineNo")
+      .populate("role")
+      .populate("employeeType")
+      .populate("department")
+      .populate("workingDays")
+      .populate("workingHours")
+      .populate("resourceCost")
+      .populate("employeeManager");
+
     if (!user) {
       return res.status(400).send("user profile with given id is not present"); // when there is no id in db
     }
