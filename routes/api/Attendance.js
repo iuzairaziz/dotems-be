@@ -3,6 +3,7 @@ const { extend } = require("lodash");
 var router = express.Router();
 const { Attendance } = require("../../model/Attendance");
 const auth = require("../../middlewares/auth");
+const mongoose = require("mongoose");
 
 /* Get All Designations And Users */
 router.get("/:id", auth, async (req, res) => {
@@ -88,9 +89,9 @@ router.post("/create-time-in", auth, async (req, res) => {
 router.put("/update", auth, async (req, res) => {
   try {
     let timeIn = await Attendance.find({
-      name: req.body.name,
+      name: mongoose.Types.ObjectId(req.body.name),
     });
-
+    console.log(req.body);
     let oldTime = timeIn[timeIn.length - 1];
     if (oldTime.timeOut)
       return res

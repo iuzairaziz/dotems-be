@@ -4,7 +4,7 @@ var router = express.Router();
 const { LeavePolicyTimeOff } = require("../../model/leavePolicyTimeOffs");
 const auth = require("../../middlewares/auth");
 const mongoose = require("mongoose");
-const { LeavePolicy } = require("../../model/leavePolicy");
+const { LeaveType } = require("../../model/leaveType");
 
 /* Get All Designations And Users */
 router.get("/", auth, async (req, res) => {
@@ -16,37 +16,77 @@ router.get("/", auth, async (req, res) => {
     .limit(perPage);
   return res.send(leavePolicy);
 });
-
-//Get Single
-router.get("/:id", auth, async (req, res) => {
+router.get("/policies/:id", auth, async (req, res) => {
   let leavePolicy;
   try {
-    leavePolicy = await LeavePolicyTimeOff.find({
-      leavePolicy: req.params.id,
-    }).populate("type");
-    if (!leavePolicy)
-      return res.status(400).send("Working Hours with given id is not present");
-    else {
-      return res.send(leavePolicy);
-    }
-  } catch {
+    console.log(typeof req.params.id);
+    let leavePolices = await LeaveType.aggregate([
+      {
+        $lookup: {
+          from: "leavepolicytimeoffs",
+          let: { leaveType_Id: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$type", "$$leaveType_Id"] },
+                    {
+                      $eq: [
+                        "$leavePolicy",
+                        mongoose.Types.ObjectId(req.params.id),
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+          as: "policy",
+        },
+      },
+    ]);
+
+    return res.send(leavePolices);
+  } catch (err) {
+    console.log(err);
     return res.status(400).send("Invalid Id"); // when id is inavlid
   }
 });
 
+//Get Single
+// router.get("/:id", auth, async (req, res) => {
+//   let leavePolicy;
+//   try {
+//     let leavePolices = LeaveType.aggregate([
+//       {
+//         $lookup: {
+//           from: "leavepolicytimeoffs",
+//           localField: "_id",
+//           foreignField: "type",
+//           as: "types",
+//         },
+//       },
+//     ]);
+
+//     return res.send(leavePolices);
+//     // leavePolicy = await LeavePolicyTimeOff.find({
+//     //   leavePolicy: req.params.id,
+//     // })
+//     //   .populate("type")
+//     //   .populate("name");
+//     // if (!leavePolicy)
+//     //   return res.status(400).send("Working Hours with given id is not present");
+//     // else {
+//     //   return res.send(leavePolicy);
+//     // }
+//   } catch {
+//     return res.status(400).send("Invalid Id"); // when id is inavlid
+//   }
+// });
+
 /*Add new Designation*/
 router.post("/", auth, async (req, res) => {
-  // let leavePolicy = await LeavePolicy.find({
-  //   name: mongoose.Types.ObjectId(req.body.name),
-  //   type: mongoose.Types.ObjectId(req.body.type),
-  // });
-  // console.log(req.body);
-  // console.log(leavePolicy);
-  // if (leavePolicy.length > 0)
-  //   return res.status(400).send("Policy With Given Name Already Exsists");
-  // leavePolicyTimeOffs = new LeavePolicyTimeOff(req.body);
-  // LeavePolicyTimeOff.updateMany({    name: mongoose.Types.ObjectId(req.body.name),
-  // type: mongoose.Types.ObjectId(req.body.type),},req.body,{upsert=true})
   LeavePolicyTimeOff.bulkWrite(
     req.body.map((item) => ({
       updateOne: {
@@ -83,9 +123,8 @@ router.put("/:id", auth, async (req, res) => {
 router.delete("/:id", auth, async (req, res) => {
   try {
     let leavePolicyTimeOff = await LeavePolicyTimeOff.deleteMany({
-      leavePolicy: req.params.id,
+      leavePolicy: mongoose.Types.ObjectId(req.params.id),
     });
-    let leavePolicy = await LeavePolicy.findByIdAndDelete(req.params.id);
 
     if (!leavePolicyTimeOff) {
       return res.status(400).send("Leave policy with given id is not present"); // when there is no id in db

@@ -62,19 +62,19 @@ router.post("/", auth, async (req, res) => {
 //   }
 // });
 
-// // Delete Designation
-// router.delete("/:id", auth, async (req, res) => {
-//   try {
-//     let workingHours = await WorkingHours.findByIdAndDelete(req.params.id);
-//     if (!workingHours) {
-//       return res
-//         .status(400)
-//         .send("Working days policy with given id is not present"); // when there is no id in db
-//     }
-//     return res.send(workingHours); // when everything is okay
-//   } catch {
-//     return res.status(400).send("Invalid Id"); // when id is inavlid
-//   }
-// });
+// Delete Designation
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    let leavePolicy = await LeavePolicy.findByIdAndDelete(req.params.id);
+    if (!leavePolicy) {
+      return res
+        .status(400)
+        .send("Working days policy with given id is not present"); // when there is no id in db
+    }
+    return res.send(leavePolicy); // when everything is okay
+  } catch {
+    return res.status(400).send("Invalid Id"); // when id is inavlid
+  }
+});
 
 module.exports = router;
