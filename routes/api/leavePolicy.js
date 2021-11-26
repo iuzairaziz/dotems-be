@@ -14,20 +14,20 @@ router.get("/", auth, async (req, res) => {
   return res.send(leavePolicies);
 });
 
-// //Get Single
-// router.get("/:id", auth, async (req, res) => {
-//   let workingHour;
-//   try {
-//     workingHour = await WorkingHours.findById(req.params.id);
-//     if (!workingHour)
-//       return res.status(400).send("Working Hours with given id is not present");
-//     else {
-//       return res.send(workingHour);
-//     }
-//   } catch {
-//     return res.status(400).send("Invalid Id"); // when id is inavlid
-//   }
-// });
+//Get Single
+router.get("/:id", auth, async (req, res) => {
+  let leavePolicy;
+  try {
+    leavePolicy = await LeavePolicy.findById(req.params.id);
+    if (!leavePolicy)
+      return res.status(400).send("Leave Policy with given id is not present");
+    else {
+      return res.send(leavePolicy);
+    }
+  } catch {
+    return res.status(400).send("Invalid Id"); // when id is inavlid
+  }
+});
 
 /*Add new Designation*/
 router.post("/", auth, async (req, res) => {
@@ -47,20 +47,20 @@ router.post("/", auth, async (req, res) => {
     });
 });
 
-// //Update
-// router.put("/:id", auth, async (req, res) => {
-//   try {
-//     let workingHours = await WorkingHours.findById(req.params.id);
-//     console.log(workingHours);
-//     if (!workingHours)
-//       return res.status(400).send("Working Hours with given id is not present");
-//     workingHours = extend(workingHours, req.body);
-//     await workingHours.save();
-//     return res.send(workingHours);
-//   } catch {
-//     return res.status(400).send("Invalid Id"); // when id is inavlid
-//   }
-// });
+//Update
+router.put("/:id", auth, async (req, res) => {
+  try {
+    let leavePolicy = await LeavePolicy.findById(req.params.id);
+    console.log(leavePolicy);
+    if (!leavePolicy)
+      return res.status(400).send("Working Hours with given id is not present");
+    leavePolicy = extend(leavePolicy, req.body);
+    await leavePolicy.save();
+    return res.send(leavePolicy);
+  } catch {
+    return res.status(400).send("Invalid Id"); // when id is inavlid
+  }
+});
 
 // Delete Designation
 router.delete("/:id", auth, async (req, res) => {
