@@ -20,11 +20,11 @@ const userSchema = mongoose.Schema(
     },
     employeeManager: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "EmployeeManager",
+      ref: "User",
     },
     department: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Department",
+      ref: "EmployeeDepartment",
     },
     employeeStatus: String,
     workingDays: {
@@ -62,9 +62,13 @@ const userSchema = mongoose.Schema(
     country: String,
     bankName: String,
     bankAccNo: String,
-    joiningDate: String,
-    terminationDate: String,
-    dateOfBirth: String,
+    joiningDate: Date,
+    terminationDate: Date,
+    dateOfBirth: Date,
+    role: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "role",
+    },
   },
   { timestamps: true }
 );

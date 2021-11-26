@@ -3,15 +3,18 @@ const { extend } = require("lodash");
 var router = express.Router();
 const { Attendance } = require("../../model/Attendance");
 const auth = require("../../middlewares/auth");
+const mongoose = require("mongoose");
 
-// /* Get All Designations And Users */
-// router.get("/show-working-hours", auth, async (req, res) => {
-//   let page = Number(req.query.page ? req.query.page : 1);
-//   let perPage = Number(req.query.perPage ? req.query.perPage : 10);
-//   let skipRecords = perPage * (page - 1);
-//   let workingHours = await WorkingHours.find().skip(skipRecords).limit(perPage);
-//   return res.send(workingHours);
-// });
+/* Get All Designations And Users */
+router.get("/:id", auth, async (req, res) => {
+  let page = Number(req.query.page ? req.query.page : 1);
+  let perPage = Number(req.query.perPage ? req.query.perPage : 10);
+  let skipRecords = perPage * (page - 1);
+  let allAttendanceTime = await Attendance.find({ name: req.params.id })
+    .skip(skipRecords)
+    .limit(perPage);
+  return res.send(allAttendanceTime);
+});
 
 // //Get Single
 // router.get("/:id", auth, async (req, res) => {
@@ -86,9 +89,9 @@ router.post("/create-time-in", auth, async (req, res) => {
 router.put("/update", auth, async (req, res) => {
   try {
     let timeIn = await Attendance.find({
-      name: req.body.name,
+      name: mongoose.Types.ObjectId(req.body.name),
     });
-
+    console.log(req.body);
     let oldTime = timeIn[timeIn.length - 1];
     if (oldTime.timeOut)
       return res

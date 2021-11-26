@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const leavePolicyTimeeOffScheme = mongoose.Schema(
   {
-    name: String,
+    leavePolicy: { type: mongoose.Schema.Types.ObjectId, ref: "LeavePolicy" },
     type: { type: mongoose.Schema.Types.ObjectId, ref: "LeaveType" },
     effectiveDate: String,
     totalLeaves: Number,
