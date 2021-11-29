@@ -76,6 +76,7 @@ router.get("/", auth, async function (req, res, next) {
     .populate("workingHours")
     .populate("resourceCost")
     .populate("employeeManager")
+    .populate("leavePolicy")
     .sort({
       createdAt: -1,
     })
@@ -127,6 +128,7 @@ router.post("/register", upload, async (req, res) => {
   user.terminationDate = req.body.terminationDate;
   user.dateOfBirth = req.body.dateOfBirth;
   user.role = req.body.role;
+  user.leavePolicy = req.body.leavePolicy;
   await user.generateHashedPassword();
   await user.save();
   return res.send(
@@ -266,7 +268,8 @@ router.get("/:id", auth, async (req, res) => {
       .populate("workingDays")
       .populate("workingHours")
       .populate("resourceCost")
-      .populate("employeeManager");
+      .populate("employeeManager")
+      .populate("leavePolicy");
 
     if (!user) {
       return res.status(400).send("user profile with given id is not present"); // when there is no id in db
