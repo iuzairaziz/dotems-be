@@ -44,6 +44,10 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "ResourceCost",
     },
+    leavePolicy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "LeavePolicy",
+    },
     technology: [
       {
         type: mongoose.Schema.Types.ObjectId,
