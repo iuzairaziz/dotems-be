@@ -14,6 +14,7 @@ const leaveSchema = mongoose.Schema(
       enum: ["pending", "approved", "rejected", "unpaid"],
       default: "pending",
     },
+    employeeManager: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     pmStatus: {
       type: String,
       enum: ["pending", "approved", "rejected", "unpaid"],
