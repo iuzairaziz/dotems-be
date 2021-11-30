@@ -180,6 +180,15 @@ router.get("/:id", auth, async (req, res) => {
     { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
     {
       $lookup: {
+        from: "taskprioirties",
+        localField: "taskPriority",
+        foreignField: "_id",
+        as: "taskPriority",
+      },
+    },
+    { $unwind: { path: "$taskPriority", preserveNullAndEmptyArrays: true } },
+    {
+      $lookup: {
         from: "tasks",
         localField: "parentTask",
         foreignField: "_id",
@@ -300,6 +309,15 @@ router.get("/by-employee/:empId", auth, async (req, res) => {
     { $unwind: { path: "$teamLead", preserveNullAndEmptyArrays: true } },
     {
       $lookup: {
+        from: "taskprioirties",
+        localField: "taskPriority",
+        foreignField: "_id",
+        as: "taskPriority",
+      },
+    },
+    { $unwind: { path: "$taskPriority", preserveNullAndEmptyArrays: true } },
+    {
+      $lookup: {
         from: "timesheets",
         let: { taskId: "$_id" },
         pipeline: [
@@ -339,6 +357,15 @@ router.get("/by-employee-late/:empId", auth, async (req, res) => {
         as: "project",
       },
     },
+    {
+      $lookup: {
+        from: "taskprioirties",
+        localField: "taskPriority",
+        foreignField: "_id",
+        as: "taskPriority",
+      },
+    },
+    { $unwind: { path: "$taskPriority", preserveNullAndEmptyArrays: true } },
     { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
     {
       $lookup: {
