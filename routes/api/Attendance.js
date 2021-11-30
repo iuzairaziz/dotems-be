@@ -4,16 +4,103 @@ var router = express.Router();
 const { Attendance } = require("../../model/Attendance");
 const auth = require("../../middlewares/auth");
 const mongoose = require("mongoose");
+const { User } = require("../../model/user");
+const moment = require("moment");
 
 /* Get All Designations And Users */
-router.get("/:id", auth, async (req, res) => {
-  let page = Number(req.query.page ? req.query.page : 1);
-  let perPage = Number(req.query.perPage ? req.query.perPage : 10);
-  let skipRecords = perPage * (page - 1);
-  let allAttendanceTime = await Attendance.find({ name: req.params.id })
-    .skip(skipRecords)
-    .limit(perPage);
-  return res.send(allAttendanceTime);
+// router.get("/:id", auth, async (req, res) => {
+//   let page = Number(req.query.page ? req.query.page : 1);
+//   let perPage = Number(req.query.perPage ? req.query.perPage : 10);
+//   let skipRecords = perPage * (page - 1);
+//   let allAttendanceTime = await Attendance.find({ name: req.params.id })
+//     .skip(skipRecords)
+//     .limit(perPage);
+//   return res.send(allAttendanceTime);
+// });
+
+//Get Today Attendace
+router.post("/", auth, async (req, res) => {
+  try {
+    console.log(req.body);
+    let attendance = await User.aggregate([
+      // Join with user_info table
+      {
+        $lookup: {
+          from: "attendances", // other table name
+          let: { user_Id: "$_id" },
+          // localField: "_id", // name of users table field
+          // foreignField: "name", // name of userinfo table field
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$name", "$$user_Id"] },
+                    {
+                      $eq: ["$date", req.body.date],
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+          as: "present", // alias for userinfo table
+        },
+      },
+
+      // Join with user_role table
+      {
+        $lookup: {
+          from: "leaves",
+          let: { user_Id: "$_id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$user", "$$user_Id"] } } },
+            {
+              $lookup: {
+                from: "leavedetails",
+                let: { leave_Id: "$_id" }, // id of leave table
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $and: [
+                          { $eq: ["$leave", "$$leave_Id"] },
+                          {
+                            $eq: ["$date", req.body.date],
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+                as: "leave_detail",
+              },
+            },
+            {
+              $project: {
+                _id: 1,
+                leave_detail: 1,
+              },
+            },
+          ],
+          as: "leave",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          present: 1,
+          leave: 1,
+          // "leave.leave_detail": 1,
+        },
+      },
+    ]);
+
+    return res.send(attendance);
+  } catch (error) {
+    return res.status(400).send(error);
+  }
 });
 
 // //Get Single
