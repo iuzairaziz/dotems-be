@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const technologySchema = mongoose.Schema(
   {
     name: String,
+    preset: {
+      type: Boolean,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
