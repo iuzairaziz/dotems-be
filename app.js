@@ -109,9 +109,7 @@ app.use("/working-shift", apiWorkingShift);
 app.use("/leave-policy", apiLeavePolicy);
 app.use("/leave-policy-detail", apiLeavePolicyTimeOff);
 app.use("/resource-cost", apiResourceCost);
-// app.use("/leave-policy", apiLeavePolicy);
 
-// app.use("/time-in", apiTimeIn);
 app.use("/attendance", apiTimeOut);
 
 // catch 404 and forward to error handler

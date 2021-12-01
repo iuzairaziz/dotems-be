@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const leaveDetailSchema = mongoose.Schema(
   {
     leave: { type: mongoose.Schema.Types.ObjectId, ref: "Leave" },
-    date: Date,
+    date: String,
     swapDate: [Date],
     leaveStatus: {
       type: String,

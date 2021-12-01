@@ -876,16 +876,44 @@ router.get("/report", async (req, res) => {
               },
             },
             {
+              $lookup: {
+                from: "workingdays",
+                foreignField: "workingDays",
+                localField: "users",
+                as: "workingDays",
+              },
+            },
+            {
+              $lookup: {
+                from: "workinghours",
+                foreignField: "_id",
+                localField: "workingHours",
+                as: "workingHours",
+              },
+            },
+            {
+              $unwind: {
+                path: "$workingDays",
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
+              $unwind: {
+                path: "$workingHours",
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
               $addFields: {
                 perHourSalary: {
                   $divide: [
                     {
                       $divide: [
                         { $sum: ["$salary", "$$empExpense"] },
-                        { $multiply: ["$workingDays", 4.3] },
+                        { $multiply: ["$workingDays.daysNumber", 4.3] },
                       ],
                     },
-                    "$workingHrs",
+                    "$workingHours.hours",
                   ],
                 },
               },

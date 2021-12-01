@@ -11,6 +11,7 @@ const workingDays = mongoose.Schema(
     friday: Boolean,
     saturday: Boolean,
     sunday: Boolean,
+    daysNumber: Number,
   },
   { timestamps: true }
 );

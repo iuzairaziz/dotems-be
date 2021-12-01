@@ -107,7 +107,9 @@ router.post("/new", auth, async (req, res) => {
       let leaveDeatil = await LeaveDetail.bulkWrite(
         req.body.dates.map((d) => {
           return {
-            insertOne: { document: { leave: resp._id, date: d } },
+            insertOne: {
+              document: { leave: resp._id, date: moment(d).format("D-M-YYYY") },
+            },
           };
         }),
         { ordered: false }

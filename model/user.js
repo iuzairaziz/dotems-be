@@ -44,6 +44,10 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "ResourceCost",
     },
+    leavePolicy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "LeavePolicy",
+    },
     technology: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -68,6 +72,10 @@ const userSchema = mongoose.Schema(
     role: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "role",
+    },
+    workingShift: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WorkingShift",
     },
   },
   { timestamps: true }
