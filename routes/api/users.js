@@ -150,46 +150,53 @@ router.post("/login", async (req, res) => {
   console.log(req.body);
   // let user = await User.findOne({ email: req.body.email });
 
-  let user =
-    User.aggregate[
-      {
-        $lookup: {
-          from: "roles",
-          let: { roleId: "$role" },
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $eq: ["$$roleId", "$_id"],
-                },
+  let result = await User.aggregate([
+    {
+      $match: {
+        email: req.body.email,
+      },
+    },
+    {
+      $lookup: {
+        from: "roles",
+        let: { roleId: "$role" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$$roleId", "$_id"],
               },
             },
-            {
-              $lookup: {
-                from: "rolepermissions",
-                localField: "_id",
-                foreignField: "role",
-                as: "permissions",
-              },
+          },
+          {
+            $lookup: {
+              from: "rolepermissions",
+              localField: "_id",
+              foreignField: "role",
+              as: "permissions",
             },
-          ],
-          as: "role",
-        },
-      }
-    ];
+          },
+        ],
+        as: "role",
+      },
+    },
+    { $unwind: { path: "$role", preserveNullAndEmptyArrays: true } },
+  ]);
+  let user = result[0];
   if (!user) return res.status(400).send("User Not Registered");
   let isValid = await bcrypt.compare(req.body.password, user.password);
   if (!isValid) return res.status(401).send("Invalid Password");
-  // let token = jwt.sign(
-  //   {
-  //     _id: user._id,
-  //     name: user.name,
-  //     status: user.status,
-  //     userRole: user.role,
-  //   },
-  //   config.get("jwtPrivateKey")
-  // );
-  return res.send(user);
+  let token = jwt.sign(
+    {
+      _id: user._id,
+      name: user.name,
+      status: user.status,
+      role: user.role,
+    },
+    config.get("jwtPrivateKey")
+  );
+  // console.log("leng", user.role.length);
+  return res.send(token);
 });
 
 // Update User
