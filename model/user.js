@@ -73,6 +73,10 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "role",
     },
+    workingShift: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WorkingShift",
+    },
   },
   { timestamps: true }
 );
